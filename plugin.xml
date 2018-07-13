@@ -47,7 +47,7 @@
         </config-file>
 
         <source-file src="src/android/SplashScreen.java" target-dir="src/org/apache/cordova/splashscreen" />
-        <framework src="com.squareup.picasso:picasso:2.71828">
+        <framework src="com.squareup.picasso:picasso:2.71828" />
     </platform>
 
     <!-- ios -->
