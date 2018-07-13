@@ -354,7 +354,7 @@
         NSLog(@"WARNING: The splashscreen image named %@ was not found", imageName);
     }
     
-    id imageUrl = [self.commandDelegate.settings objectForKey:[@"imageUrl" lowercaseString]];
+    id imageUrl = [self.commandDelegate.settings objectForKey:[@"SplashUrl" lowercaseString]];
     if (imageUrl != nil) {
         imageUrl = [imageUrl stringValue];
         NSURL *url = [NSURL URLWithString: imageUrl];

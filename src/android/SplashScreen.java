@@ -307,7 +307,7 @@ public class SplashScreen extends CordovaPlugin {
                 // TODO: Use the background color of the webView's parent instead of using the preference.
                 splashImageView.setBackgroundColor(preferences.getInteger("backgroundColor", Color.BLACK));
 
-                String imageUrl = preferences.getString("imageUrl", null);
+                String imageUrl = preferences.getString("SplashUrl", null);
                 if (!TextUtils.isEmpty(imageUrl)) {
                     Picasso.get().load(imageUrl).placeholder(drawableId).into(splashImageView);
                 }
