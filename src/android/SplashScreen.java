@@ -28,6 +28,7 @@ import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Handler;
+import android.text.TextUtils;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.View;
@@ -41,11 +42,14 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 
+import com.squareup.picasso.Picasso;
+
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaPlugin;
 import org.apache.cordova.CordovaWebView;
 import org.json.JSONArray;
 import org.json.JSONException;
+
 
 public class SplashScreen extends CordovaPlugin {
     private static final String LOG_TAG = "SplashScreen";
@@ -72,9 +76,9 @@ public class SplashScreen extends CordovaPlugin {
     // Helper to be compile-time compatible with both Cordova 3.x and 4.x.
     private View getView() {
         try {
-            return (View)webView.getClass().getMethod("getView").invoke(webView);
+            return (View) webView.getClass().getMethod("getView").invoke(webView);
         } catch (Exception e) {
-            return (View)webView;
+            return (View) webView;
         }
     }
 
@@ -121,13 +125,13 @@ public class SplashScreen extends CordovaPlugin {
     /**
      * Shorter way to check value of "SplashMaintainAspectRatio" preference.
      */
-    private boolean isMaintainAspectRatio () {
+    private boolean isMaintainAspectRatio() {
         return preferences.getBoolean("SplashMaintainAspectRatio", false);
     }
 
-    private int getFadeDuration () {
+    private int getFadeDuration() {
         int fadeSplashScreenDuration = preferences.getBoolean("FadeSplashScreen", true) ?
-            preferences.getInteger("FadeSplashScreenDuration", DEFAULT_FADE_DURATION) : 0;
+                preferences.getInteger("FadeSplashScreenDuration", DEFAULT_FADE_DURATION) : 0;
 
         if (fadeSplashScreenDuration < 30) {
             // [CB-9750] This value used to be in decimal seconds, so we will assume that if someone specifies 10
@@ -303,11 +307,15 @@ public class SplashScreen extends CordovaPlugin {
                 // TODO: Use the background color of the webView's parent instead of using the preference.
                 splashImageView.setBackgroundColor(preferences.getInteger("backgroundColor", Color.BLACK));
 
+                String imageUrl = preferences.getString("imageUrl", null);
+                if (!TextUtils.isEmpty(imageUrl)) {
+                    Picasso.get().load(imageUrl).placeholder(drawableId).into(splashImageView);
+                }
+
                 if (isMaintainAspectRatio()) {
                     // CENTER_CROP scale mode is equivalent to CSS "background-size:cover"
                     splashImageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-                }
-                else {
+                } else {
                     // FIT_XY scales image non-uniformly to fit into image view.
                     splashImageView.setScaleType(ImageView.ScaleType.FIT_XY);
                 }
@@ -370,19 +378,19 @@ public class SplashScreen extends CordovaPlugin {
 
                 if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
                     String colorName = preferences.getString("SplashScreenSpinnerColor", null);
-                    if(colorName != null){
-                        int[][] states = new int[][] {
-                            new int[] { android.R.attr.state_enabled}, // enabled
-                            new int[] {-android.R.attr.state_enabled}, // disabled
-                            new int[] {-android.R.attr.state_checked}, // unchecked
-                            new int[] { android.R.attr.state_pressed}  // pressed
+                    if (colorName != null) {
+                        int[][] states = new int[][]{
+                                new int[]{android.R.attr.state_enabled}, // enabled
+                                new int[]{-android.R.attr.state_enabled}, // disabled
+                                new int[]{-android.R.attr.state_checked}, // unchecked
+                                new int[]{android.R.attr.state_pressed}  // pressed
                         };
                         int progressBarColor = Color.parseColor(colorName);
-                        int[] colors = new int[] {
-                            progressBarColor,
-                            progressBarColor,
-                            progressBarColor,
-                            progressBarColor
+                        int[] colors = new int[]{
+                                progressBarColor,
+                                progressBarColor,
+                                progressBarColor,
+                                progressBarColor
                         };
                         ColorStateList colorStateList = new ColorStateList(states, colors);
                         progressBar.setIndeterminateTintList(colorStateList);
@@ -410,4 +418,5 @@ public class SplashScreen extends CordovaPlugin {
             }
         });
     }
+
 }

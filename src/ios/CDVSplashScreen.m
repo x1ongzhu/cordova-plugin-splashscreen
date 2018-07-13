@@ -353,6 +353,13 @@
     {
         NSLog(@"WARNING: The splashscreen image named %@ was not found", imageName);
     }
+    
+    id imageUrl = [self.commandDelegate.settings objectForKey:[@"imageUrl" lowercaseString]];
+    if (imageUrl != nil) {
+        imageUrl = [imageUrl stringValue];
+        NSURL *url = [NSURL URLWithString: imageUrl];
+        _imageView.image = [UIImage imageWithData: [NSData dataWithContentsOfURL:url]];
+    }
 }
 
 - (void)updateBounds
