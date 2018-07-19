@@ -356,7 +356,6 @@
     
     id imageUrl = [self.commandDelegate.settings objectForKey:[@"SplashUrl" lowercaseString]];
     if (imageUrl != nil) {
-        imageUrl = [imageUrl stringValue];
         NSURL *url = [NSURL URLWithString: imageUrl];
         _imageView.image = [UIImage imageWithData: [NSData dataWithContentsOfURL:url]];
     }
